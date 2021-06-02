@@ -12,13 +12,17 @@
       return;
     }
     isCovered = false;
-    if (!tile.isBomb) {
-      dispatch('field-revealed');
+    if (tile.isBomb) {
+      setTimeout(() => {
+        dispatch('bomb-clicked');
+      }, 1);
       return;
     }
-    setTimeout(() => {
-      dispatch('bomb-clicked');
-    }, 1);
+    dispatch('field-revealed');
+    if (numbersOfBombsInNeighborhood !== 0){
+      return;
+    }
+    emitEmptyFieldRevealed();
   }
 
   let isMarkedAsBomb = false;
@@ -27,8 +31,31 @@
     event.preventDefault();
     isMarkedAsBomb = !isMarkedAsBomb;
   }
+
+  function onEmptyFieldRevealed({ detail: {row, column} }) {
+    if (!isCovered || numbersOfBombsInNeighborhood !== 0 || !isNeighbor(row, column)) {
+      return;
+    }
+    isCovered = false;
+    dispatch('field-revealed');
+    emitEmptyFieldRevealed();
+  }
+
+  function isNeighbor(row, column) {
+    return isNumberDirectNeighbour(tile.row, row) && isNumberDirectNeighbour(tile.column, column)
+  }
+
+  function isNumberDirectNeighbour(number, neighbour) {
+    return neighbour >= number - 1 && neighbour <= number + 1
+  }
+
+  function emitEmptyFieldRevealed() {
+    window.dispatchEvent(new CustomEvent("empty-field-revealed", {detail: {row: tile.row, column: tile.column}}));
+  }
+
 </script>
 
+<svelte:window on:empty-field-revealed={onEmptyFieldRevealed}/>
 <div class="tile"
      class:covered={isCovered}
      class:marked-as-bomb={isMarkedAsBomb}
