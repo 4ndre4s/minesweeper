@@ -1,6 +1,7 @@
 <script>
   import _ from 'lodash'
   import Tile from './components/Tile.svelte'
+  import confetti from 'canvas-confetti'
 
   const numberOfTilesPerRow = 9
   const numberOfBombs = 8
@@ -31,9 +32,11 @@
     if (remainingFields !== 0) {
       return
     }
-    if (confirm('You won!')) {
-      restartGame()
-    }
+    confetti({ spread: 80, angle: 90, particleCount: 75, origin: {y: 1} }).then(() => {
+      if (confirm('You won!')) {
+        restartGame()
+      }
+    })
   }
 
   function getNumber (row, column) {
@@ -65,9 +68,6 @@
   }
 </script>
 
-<div>
-  {remainingFields}
-</div>
 <div class="tile-container">
   {#each tileRow as _, column}
     <div class="row">

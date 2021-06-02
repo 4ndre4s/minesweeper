@@ -20,6 +20,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "canvas-confetti": "^1.4.0",
     "gh-pages": "^3.2.0",
     "lodash": "^4.17.21",
     "sirv-cli": "^1.0.0"

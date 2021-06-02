@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte'
   import Bomb from './Icons/Bomb.svelte'
   import MarkedAsBomb from './Icons/MarkedAsBomb.svelte'
+  import confetti from 'canvas-confetti'
 
   const dispatch = createEventDispatcher()
 
