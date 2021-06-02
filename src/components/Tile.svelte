@@ -62,7 +62,7 @@
 </script>
 
 <svelte:window on:empty-field-revealed={onEmptyFieldRevealed}/>
-<div class="tile"
+<div class={`tile ${!isCovered ? 'tile-' + numbersOfBombsInNeighborhood : ''}`}
      class:covered={isCovered}
      class:marked-as-bomb={isMarkedAsBomb}
      on:click={reveal}
@@ -99,5 +99,29 @@
   }
   .tile.marked-as-bomb {
       cursor: default;
+  }
+  .tile.tile-1 {
+    color: blue;
+  }
+  .tile.tile-2 {
+    color: green;
+  }
+  .tile.tile-3 {
+    color: red;
+  }
+  .tile.tile-4 {
+    color: black;
+  }
+  .tile.tile-5 {
+    color: darkred;
+  }
+  .tile.tile-6 {
+    color: lightgreen;
+  }
+  .tile.tile-7 {
+    color: brown;
+  }
+  .tile.tile-8 {
+    color: grey;
   }
 </style>
