@@ -1,5 +1,5 @@
 <script>
-  import _ from "lodash"
+  import _ from 'lodash'
   import Tile from './components/Tile.svelte'
 
   const numberOfTilesPerRow = 9
@@ -21,28 +21,47 @@
   })
 
   function createArray (length, mapping) {
-    return Array.from(new Array(length), mapping);
+    return Array.from(new Array(length), mapping)
   }
 
-  let remainingFields = numberOfFields;
-  function onFieldRevealed() {
-    remainingFields--;
+  let remainingFields = numberOfFields
+
+  function onFieldRevealed () {
+    remainingFields--
     if (remainingFields !== 0) {
-      return;
+      return
     }
-    if (confirm("You won!")) {
-      restartGame();
+    if (confirm('You won!')) {
+      restartGame()
     }
   }
 
-  function onBombClicked() {
-    if (confirm("Bomb clicked!")) {
-      restartGame();
+  function getNumber (row, column) {
+
+    return [
+      findTile(row - 1, column - 1),
+      findTile(row - 1, column),
+      findTile(row - 1, column + 1),
+      findTile(row, column - 1),
+      findTile(row, column + 1),
+      findTile(row + 1, column - 1),
+      findTile(row + 1, column),
+      findTile(row + 1, column + 1)
+    ].filter(e => e && e.isBomb).length
+  }
+
+  function findTile (row, column) {
+    return mappedTiles.find(i => i.row === row && i.column === column)
+  }
+
+  function onBombClicked () {
+    if (confirm('Bomb clicked!')) {
+      restartGame()
     }
   }
 
   function restartGame () {
-    window.location.href = window.location.href;
+    window.location.href = window.location.href
   }
 </script>
 
@@ -53,7 +72,8 @@
   {#each tileRow as _, column}
     <div class="row">
       {#each tileRow as _, row}
-        <Tile tile="{mappedTiles.find(i => i.row === row && i.column === column)}"
+        <Tile tile="{findTile(row, column)}"
+              numbersOfBombsInNeighborhood="{getNumber(row, column)}"
               on:bomb-clicked={onBombClicked}
               on:field-revealed={onFieldRevealed}
         />
@@ -72,6 +92,7 @@
         border-bottom: 3px outset #808080;
         border-right: 3px outset #808080;
     }
+
     .row {
         display: flex;
     }
