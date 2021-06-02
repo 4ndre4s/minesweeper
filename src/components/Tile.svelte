@@ -1,4 +1,6 @@
 <script>
+  import {createEventDispatcher} from 'svelte'
+  const dispatch = createEventDispatcher();
 
   export let tile;
 
@@ -9,6 +11,12 @@
       return;
     }
     isCovered = false;
+    if (!tile.isBomb) {
+      return;
+    }
+    setTimeout(() => {
+      dispatch('bomb-clicked');
+    }, 1);
   }
 
   let isMarkedAsBomb = false;
