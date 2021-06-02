@@ -10,8 +10,8 @@
   const allTiles = _.shuffle([...bombs, ...createArray(numberOfFields - numberOfBombs, () => false)])
 
   const mappedTiles = allTiles.map((isBomb, index) => {
-    const column = index % 9
-    const row = Math.floor(index / 9)
+    const column = index % numberOfTilesPerRow
+    const row = Math.floor(index / numberOfTilesPerRow)
 
     return {
       column,
