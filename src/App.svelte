@@ -24,7 +24,7 @@
     return Array.from(new Array(length), mapping)
   }
 
-  let remainingFields = numberOfFields
+  let remainingFields = numberOfFields - numberOfBombs
 
   function onFieldRevealed () {
     remainingFields--
