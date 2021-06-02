@@ -3,11 +3,12 @@
   const dispatch = createEventDispatcher();
 
   export let tile;
+  export let numbersOfBombsInNeighborhood;
 
   let isCovered = true;
 
   function reveal() {
-    if (isMarkedAsBomb) {
+    if (isMarkedAsBomb || !isCovered) {
       return;
     }
     isCovered = false;
@@ -34,6 +35,9 @@
      class:is-bomb={!isCovered && tile.isBomb}
      on:click={reveal}
      on:contextmenu={toggleBombMarker}>
+  {#if !isCovered && !tile.isBomb && numbersOfBombsInNeighborhood !== 0}
+    {numbersOfBombsInNeighborhood}
+  {/if}
 </div>
 
 <style>
@@ -42,6 +46,8 @@
       height: 20px;
       background: #cccccc;
       border: 1px solid #6f6f6f;
+      text-align: center;
+      font-weight: bold;
   }
   .tile.covered {
       width: 16px;
