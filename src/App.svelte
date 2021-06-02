@@ -1,15 +1,34 @@
 <script>
+  import _ from "lodash"
   import Tile from './components/Tile.svelte'
 
-  const numberOfTiles = 9
-  const TILES = Array.from(new Array(numberOfTiles), (_, i) => i + 1)
+  const numberOfTilesPerRow = 9
+  const numberOfBombs = 8
+  const tileRow = createArray(numberOfTilesPerRow)
+  const bombs = createArray(numberOfBombs, () => true)
+  const allTiles = _.shuffle([...bombs, ...createArray((numberOfTilesPerRow * numberOfTilesPerRow) - numberOfBombs, () => false)])
+
+  const mappedTiles = allTiles.map((isBomb, index) => {
+    const column = index % 9
+    const row = Math.floor(index / 9)
+
+    return {
+      column,
+      row,
+      isBomb
+    }
+  })
+
+  function createArray (length, mapping) {
+    return Array.from(new Array(length), mapping);
+  }
 </script>
 
 <div class="tile-container">
-  {#each TILES as tile, columnIndex}
+  {#each tileRow as _, column}
     <div class="row">
-      {#each TILES as rowIndex}
-        <Tile columnIndex={columnIndex} rowIndex={rowIndex}/>
+      {#each tileRow as _, row}
+        <Tile tile="{mappedTiles.find(i => i.row === row && i.column === column)}"/>
       {/each}
     </div>
   {/each}

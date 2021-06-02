@@ -1,6 +1,6 @@
 <script>
-  export let rowIndex;
-  export let columnIndex;
+
+  export let tile;
 
   let isCovered = true;
 
@@ -19,7 +19,13 @@
   }
 </script>
 
-<div class="tile" class:covered={isCovered} class:bomb={isMarkedAsBomb} on:click={reveal} on:contextmenu={toggleBombMarker}></div>
+<div class="tile"
+     class:covered={isCovered}
+     class:marked-as-bomb={isMarkedAsBomb}
+     class:is-bomb={!isCovered && tile.isBomb}
+     on:click={reveal}
+     on:contextmenu={toggleBombMarker}>
+</div>
 
 <style>
   .tile {
@@ -38,7 +44,7 @@
       border-bottom: 3px outset #808080;
       border-right: 3px outset #808080;
   }
-  .tile.covered.bomb::before {
+  .tile.covered.marked-as-bomb::before {
       content: '';
       cursor: default;
       display: inline-block;
@@ -47,6 +53,9 @@
       margin-left: 1px;
       margin-bottom: 1px;
       border-radius: 15px;
+      background: orange;
+  }
+  .tile:not(.covered).is-bomb {
       background: red;
   }
 </style>
