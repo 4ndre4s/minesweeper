@@ -40,6 +40,7 @@
   }
   .tile.covered.bomb::before {
       content: '';
+      cursor: default;
       display: inline-block;
       width: .75rem;
       height: .75rem;
