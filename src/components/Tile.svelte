@@ -9,6 +9,7 @@
   export let numbersOfBombsInNeighborhood
 
   let isCovered = true
+  let bombClicked = false
 
   function reveal () {
     if (isMarkedAsBomb || !isCovered) {
@@ -16,6 +17,7 @@
     }
     isCovered = false
     if (tile.isBomb) {
+      bombClicked = true;
       setTimeout(() => {
         dispatch('bomb-clicked')
       }, 1)
@@ -65,6 +67,7 @@
 <div class={`tile ${!isCovered ? 'tile-' + numbersOfBombsInNeighborhood : ''}`}
      class:covered={isCovered}
      class:marked-as-bomb={isMarkedAsBomb}
+     class:bomb-clicked={bombClicked}
      on:click={reveal}
      on:contextmenu={toggleBombMarker}>
   {#if !isCovered && !tile.isBomb && numbersOfBombsInNeighborhood !== 0}
@@ -96,6 +99,9 @@
       border-left: 3px outset white;
       border-bottom: 3px outset #808080;
       border-right: 3px outset #808080;
+  }
+  .tile.bomb-clicked {
+      background: red;
   }
   .tile.marked-as-bomb {
       cursor: default;
