@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte'
-  import Bomb from './Bomb.svelte'
+  import Bomb from './Icons/Bomb.svelte'
+  import MarkedAsBomb from './Icons/MarkedAsBomb.svelte'
 
   const dispatch = createEventDispatcher()
 
@@ -72,6 +73,9 @@
   {#if !isCovered && tile.isBomb}
     <Bomb/>
   {/if}
+  {#if isMarkedAsBomb && isCovered}
+    <MarkedAsBomb/>
+  {/if}
 </div>
 
 <style>
@@ -92,5 +96,8 @@
       border-left: 3px outset white;
       border-bottom: 3px outset #808080;
       border-right: 3px outset #808080;
+  }
+  .tile.marked-as-bomb {
+      cursor: default;
   }
 </style>
