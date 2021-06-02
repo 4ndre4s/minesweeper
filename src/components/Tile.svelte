@@ -1,59 +1,61 @@
 <script>
-  import {createEventDispatcher} from 'svelte'
-  const dispatch = createEventDispatcher();
+  import { createEventDispatcher } from 'svelte'
+  import Bomb from './Bomb.svelte'
 
-  export let tile;
-  export let numbersOfBombsInNeighborhood;
+  const dispatch = createEventDispatcher()
 
-  let isCovered = true;
+  export let tile
+  export let numbersOfBombsInNeighborhood
 
-  function reveal() {
+  let isCovered = true
+
+  function reveal () {
     if (isMarkedAsBomb || !isCovered) {
-      return;
+      return
     }
-    isCovered = false;
+    isCovered = false
     if (tile.isBomb) {
       setTimeout(() => {
-        dispatch('bomb-clicked');
-      }, 1);
-      return;
+        dispatch('bomb-clicked')
+      }, 1)
+      return
     }
-    dispatch('field-revealed');
-    if (numbersOfBombsInNeighborhood !== 0){
-      return;
-    }
-    emitEmptyFieldRevealed();
-  }
-
-  let isMarkedAsBomb = false;
-
-  function toggleBombMarker(event) {
-    event.preventDefault();
-    isMarkedAsBomb = !isMarkedAsBomb;
-  }
-
-  function onEmptyFieldRevealed({ detail: {row, column} }) {
-    if (!isCovered || !isNeighbor(row, column)) {
-      return;
-    }
-    isCovered = false;
-    dispatch('field-revealed');
+    dispatch('field-revealed')
     if (numbersOfBombsInNeighborhood !== 0) {
-      return;
+      return
     }
-    emitEmptyFieldRevealed();
+    emitEmptyFieldRevealed()
   }
 
-  function isNeighbor(row, column) {
+  let isMarkedAsBomb = false
+
+  function toggleBombMarker (event) {
+    event.preventDefault()
+    isMarkedAsBomb = !isMarkedAsBomb
+  }
+
+  function onEmptyFieldRevealed ({ detail: { row, column } }) {
+    if (!isCovered || !isNeighbor(row, column)) {
+      return
+    }
+    isCovered = false
+    dispatch('field-revealed')
+    if (numbersOfBombsInNeighborhood !== 0) {
+      return
+    }
+    emitEmptyFieldRevealed()
+  }
+
+  function isNeighbor (row, column) {
     return isNumberDirectNeighbour(tile.row, row) && isNumberDirectNeighbour(tile.column, column)
   }
 
-  function isNumberDirectNeighbour(number, neighbour) {
+  function isNumberDirectNeighbour (number, neighbour) {
     return neighbour >= number - 1 && neighbour <= number + 1
   }
 
-  function emitEmptyFieldRevealed() {
-    window.dispatchEvent(new CustomEvent("empty-field-revealed", {detail: {row: tile.row, column: tile.column}}));
+  function emitEmptyFieldRevealed () {
+    window.dispatchEvent(new CustomEvent('empty-field-revealed', { detail: { row: tile.row, column: tile.column } }))
   }
 
 </script>
@@ -62,11 +64,13 @@
 <div class="tile"
      class:covered={isCovered}
      class:marked-as-bomb={isMarkedAsBomb}
-     class:is-bomb={!isCovered && tile.isBomb}
      on:click={reveal}
      on:contextmenu={toggleBombMarker}>
   {#if !isCovered && !tile.isBomb && numbersOfBombsInNeighborhood !== 0}
     {numbersOfBombsInNeighborhood}
+  {/if}
+  {#if !isCovered && tile.isBomb}
+    <Bomb/>
   {/if}
 </div>
 
@@ -88,19 +92,5 @@
       border-left: 3px outset white;
       border-bottom: 3px outset #808080;
       border-right: 3px outset #808080;
-  }
-  .tile.covered.marked-as-bomb::before {
-      content: '';
-      cursor: default;
-      display: inline-block;
-      width: .75rem;
-      height: .75rem;
-      margin-left: 1px;
-      margin-bottom: 1px;
-      border-radius: 15px;
-      background: orange;
-  }
-  .tile:not(.covered).is-bomb {
-      background: red;
   }
 </style>
