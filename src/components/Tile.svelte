@@ -24,7 +24,9 @@
       }, 1)
       return
     }
-    dispatch('field-revealed')
+    setTimeout(() => {
+      dispatch('field-revealed')
+    }, 1)
     if (numbersOfBombsInNeighborhood !== 0) {
       return
     }
