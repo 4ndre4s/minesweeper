@@ -12,6 +12,7 @@
     }
     isCovered = false;
     if (!tile.isBomb) {
+      dispatch('field-revealed');
       return;
     }
     setTimeout(() => {

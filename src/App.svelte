@@ -6,7 +6,8 @@
   const numberOfBombs = 8
   const tileRow = createArray(numberOfTilesPerRow)
   const bombs = createArray(numberOfBombs, () => true)
-  const allTiles = _.shuffle([...bombs, ...createArray(Math.pow(numberOfTilesPerRow, 2) - numberOfBombs, () => false)])
+  const numberOfFields = Math.pow(numberOfTilesPerRow, 2)
+  const allTiles = _.shuffle([...bombs, ...createArray(numberOfFields - numberOfBombs, () => false)])
 
   const mappedTiles = allTiles.map((isBomb, index) => {
     const column = index % 9
@@ -23,18 +24,39 @@
     return Array.from(new Array(length), mapping);
   }
 
+  let remainingFields = numberOfFields;
+  function onFieldRevealed() {
+    remainingFields--;
+    if (remainingFields !== 0) {
+      return;
+    }
+    if (confirm("You won!")) {
+      restartGame();
+    }
+  }
+
   function onBombClicked() {
     if (confirm("Bomb clicked!")) {
-      window.location.href = window.location.href;
+      restartGame();
     }
+  }
+
+  function restartGame () {
+    window.location.href = window.location.href;
   }
 </script>
 
+<div>
+  {remainingFields}
+</div>
 <div class="tile-container">
   {#each tileRow as _, column}
     <div class="row">
       {#each tileRow as _, row}
-        <Tile tile="{mappedTiles.find(i => i.row === row && i.column === column)}" on:bomb-clicked={onBombClicked}/>
+        <Tile tile="{mappedTiles.find(i => i.row === row && i.column === column)}"
+              on:bomb-clicked={onBombClicked}
+              on:field-revealed={onFieldRevealed}
+        />
       {/each}
     </div>
   {/each}
