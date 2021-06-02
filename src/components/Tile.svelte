@@ -18,6 +18,7 @@
     isCovered = false
     if (tile.isBomb) {
       bombClicked = true;
+      emitRevealBombs();
       setTimeout(() => {
         dispatch('bomb-clicked')
       }, 1)
@@ -57,13 +58,23 @@
     return neighbour >= number - 1 && neighbour <= number + 1
   }
 
+  function onRevealBombs() {
+    if (!tile.isBomb) {
+      return;
+    }
+    isCovered = false;
+  }
+
   function emitEmptyFieldRevealed () {
     window.dispatchEvent(new CustomEvent('empty-field-revealed', { detail: { row: tile.row, column: tile.column } }))
+  }
+  function emitRevealBombs () {
+    window.dispatchEvent(new Event('reveal-bombs'))
   }
 
 </script>
 
-<svelte:window on:empty-field-revealed={onEmptyFieldRevealed}/>
+<svelte:window on:empty-field-revealed={onEmptyFieldRevealed} on:reveal-bombs={onRevealBombs}/>
 <div class={`tile ${!isCovered ? 'tile-' + numbersOfBombsInNeighborhood : ''}`}
      class:covered={isCovered}
      class:marked-as-bomb={isMarkedAsBomb}
