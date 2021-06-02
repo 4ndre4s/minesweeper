@@ -33,11 +33,14 @@
   }
 
   function onEmptyFieldRevealed({ detail: {row, column} }) {
-    if (!isCovered || numbersOfBombsInNeighborhood !== 0 || !isNeighbor(row, column)) {
+    if (!isCovered || !isNeighbor(row, column)) {
       return;
     }
     isCovered = false;
     dispatch('field-revealed');
+    if (numbersOfBombsInNeighborhood !== 0) {
+      return;
+    }
     emitEmptyFieldRevealed();
   }
 
